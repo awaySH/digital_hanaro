@@ -1,7 +1,7 @@
 def login(username, password):
-    # 사용자 인증 로직 구현
+    # 비밀번호 비교에서 None 체크 추가
     user = get_user_from_db(username)
-    if user and user.password == hash_password(password):
+    if user and user.password and user.password == hash_password(password):
         return True
     return False
 
