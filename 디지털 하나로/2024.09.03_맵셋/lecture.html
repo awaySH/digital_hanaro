@@ -65,10 +65,11 @@
       };
 
       window.addEventListener("load", () => {
-        const fnKor = debounce(()=>{
-          setWeek('kor')
-        },500)
-        document.getElementById("btnKor").addEventListener("click",fnKor
+        const fnKor = debounce(() => {
+          setWeek("kor");
+        }, 500);
+
+        document.getElementById("btnKor").addEventListener("click", fnKor);
       });
 
       function testing() {
@@ -86,7 +87,7 @@
         }, 200);
       }
 
-      const throttlesetWeek = throttle(setWeek('math'))
+      const throttlesetWeek = throttle(setWeek("math"));
     </script>
   </body>
 </html>
