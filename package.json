@@ -1,0 +1,26 @@
+{
+  "name": "digital_hanaro_study",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awaySH/digital_hanaro.git"
+  },
+  "keywords": [
+    "JS"
+  ],
+  "author": "a.way",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awaySH/digital_hanaro/issues"
+  },
+  "homepage": "https://github.com/awaySH/digital_hanaro#readme",
+  "description": "",
+  "dependencies": {
+    "digital_hanaro_study": "^0.0.1",
+    "digital_hanaro_utils": "^0.0.4"
+  }
+}
