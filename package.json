@@ -9,6 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/awaySH/digital_hanaro.git"
   },
+  "type": "module",
   "keywords": [
     "JS"
   ],
