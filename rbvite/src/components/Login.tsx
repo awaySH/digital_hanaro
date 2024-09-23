@@ -1,43 +1,84 @@
-import { useState, FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
+import Button from './atoms/Button';
+import LabelInput from './molecules/LabelInput';
 
-type LoginFunction = (name: string, password: string) => void;
-
-interface LoginProps {
-  login: LoginFunction;
-}
-
-export default function Login({ login }: LoginProps) {
+export default function Login({
+  login,
+}: {
+  login: (id: number, name: string) => void;
+}) {
+  const [id, setId] = useState(0);
   const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const signIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(name, password);
-    // 폼 제출 후 입력 필드 초기화
-    setName('');
-    setPassword('');
+    if (!id || !name) {
+      alert('Input the id & name!!');
+      return;
+    }
+    login(id, name);
   };
+  // const signIn = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const eles = e.currentTarget.elements;
+  //   const { id, name } = eles as typeof eles & {
+  //     id: HTMLInputElement;
+  //     name: HTMLInputElement;
+  //   };
+  //   // console.log('$$$', id, name);
+  //   if (!id.value || !name.value) {
+  //     alert('Input the id & name!!');
+  //     id.focus();
+  //     return;
+  //   }
+
+  //   login(+id.value, name.value);
+  // };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        Name:{' '}
-        <input
+      <form onSubmit={signIn} className='border p-4'>
+        <LabelInput
+          label='ID'
+          type='number'
+          onChange={(e) => setId(+e.currentTarget.value)}
+        />
+        <LabelInput
+          label='Name'
           type='text'
-          placeholder='Name...'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
+          onChange={(e) => setName(e.currentTarget.value)}
         />
-        Password:{' '}
+        {/* <div className='flex'>
+        <label htmlFor='id' className='w-24'>
+          ID:
+        </label>
         <input
-          type='password'
-          placeholder='Password...'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          id='id'
+          type='number'
+          placeholder='ID...'
+          className='inp mb-3'
+          // onChange={(e) => setId(+e.currentTarget.value)}
         />
-        <button type='submit'>Sign in</button>
+      </div> */}
+        {/* <div className='flex'>
+        <label htmlFor='name' className='w-24'>
+          Name:
+        </label>
+        <input
+          id='name'
+          type='text'
+          autoComplete='off'
+          placeholder='Name...'
+          className='inp'
+          // onChange={(e) => setName(e.currentTarget.value)}
+        />
+      </div> */}
+        {/* <button className='btn btn-success float-end mt-3'>Sign In</button> */}
+        <Button
+          text='Sign In'
+          variant='btn-success'
+          classNames='float-end mt-3'
+        />
       </form>
     </>
   );
