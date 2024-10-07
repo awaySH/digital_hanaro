@@ -1,48 +1,31 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useImperativeHandle, useRef } from 'react';
 import Button from './atoms/Button';
 import LabelInput from './molecules/LabelInput';
+import { useSession } from '../hooks/session-context';
 
-export default function Login({
-  login,
-}: {
-  login: (id: number, name: string) => void;
-}) {
-  // const [id, setId] = useState(0);
-  // const [name, setName] = useState('');
+export type LoginHandler = {
+  focus: (prop: string) => void;
+};
+
+export default function Login() {
+  const { login, loginRef } = useSession();
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
+  const handler: LoginHandler = {
+    focus(prop) {
+      if (prop === 'id') idRef.current?.focus();
+      if (prop === 'name') nameRef.current?.focus();
+    },
+  };
+  useImperativeHandle(loginRef, () => handler);
+
   const signIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const id = idRef.current?.value;
-    const name = nameRef.current?.value;
-    if (!id || !name) {
-      alert('Input the id & name!!');
-      return;
-    }
+    const id = idRef.current?.value ?? 0;
+    const name = nameRef.current?.value ?? '';
     login(+id, name);
   };
-  // const signIn = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const eles = e.currentTarget.elements;
-  //   const { id, name } = eles as typeof eles & {
-  //     id: HTMLInputElement;
-  //     name: HTMLInputElement;
-  //   };
-  //   // console.log('$$$', id, name);
-  //   if (!id.value || !name.value) {
-  //     alert('Input the id & name!!');
-  //     id.focus();
-  //     return;
-  //   }
-
-  //   login(+id.value, name.value);
-  // };
-
-  // const changeName = (e: ChangeEvent<HTMLInputElement>) => {
-  //   console.log('nnnnnnnn>>', name);
-  //   setName(e.currentTarget.value);
-  // };
 
   return (
     <>
@@ -92,12 +75,9 @@ export default function Login({
         />
       </div> */}
         {/* <button className='btn btn-success float-end mt-3'>Sign In</button> */}
-        <Button
-          text='Sign In'
-          type='submit'
-          variant='btn-success'
-          classNames='float-end mt-3'
-        />
+        <Button type='submit' variant='btn-success' classNames='float-end mt-3'>
+          Sign In
+        </Button>
       </form>
     </>
   );

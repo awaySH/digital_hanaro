@@ -5,10 +5,12 @@ import {
   useImperativeHandle,
   useState,
 } from 'react';
+import { useCounter } from '../hooks/counter-hook';
+import { useSession } from '../hooks/session-context';
 
 type TitleProps = {
   text: string;
-  name: string;
+  name?: string;
 };
 
 const Title = ({ text, name }: TitleProps) => {
@@ -45,25 +47,21 @@ const Body = ({ children }: { children: ReactNode }) => {
 // }
 
 type Props = {
-  name: string;
   age: number;
-  count: number;
-  plusCount: () => void;
-  minusCount: () => void;
 };
 
 export type MyHandler = {
   jumpHelloState: () => void;
 };
 
-function Hello(
-  { name, age, count, plusCount, minusCount }: Props,
-  ref: ForwardedRef<MyHandler>
-) {
+function Hello({ age }: Props, ref: ForwardedRef<MyHandler>) {
   // const [myState, setMyState] = useState(() => new Date().getTime());
+  const {
+    session: { loginUser },
+  } = useSession();
+  const { count, plusCount, minusCount } = useCounter();
   const [myState, setMyState] = useState(0);
   let v = 1;
-  // console.debug('********', v, myState, count);
 
   const handler: MyHandler = {
     jumpHelloState: () => setMyState((pre) => pre * 10),
@@ -72,7 +70,7 @@ function Hello(
 
   return (
     <div className='my-5 border border-slate-300 p-3'>
-      <Title text='Hello~' name={name} />
+      <Title text='Hello~' name={loginUser?.name} />
       <Body>
         <h3 className='text-center text-2xl'>myState: {myState}</h3>
         This is Hello Body Component. {v} - {age}
