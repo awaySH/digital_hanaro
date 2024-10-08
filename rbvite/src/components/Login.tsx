@@ -1,14 +1,26 @@
-import { FormEvent, useImperativeHandle, useRef } from 'react';
+import {
+  FormEvent,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 import Button from './atoms/Button';
 import LabelInput from './molecules/LabelInput';
 import { useSession } from '../hooks/session-context';
+import { useCounter } from '../hooks/counter-hook';
+import { useInterval, useTimeout } from '../hooks/timer-hooks';
+// import { useCounter } from '../hooks/counter-hook';
 
 export type LoginHandler = {
   focus: (prop: string) => void;
 };
 
 export default function Login() {
+  console.log('Rerender Login!!');
   const { login, loginRef } = useSession();
+  const { count, plusCount, minusCount } = useCounter();
+
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -27,9 +39,43 @@ export default function Login() {
     login(+id, name);
   };
 
+  // useEffect(() => {
+  //   const intl = setTimeout((x) => console.log('xxx', x), 500, 123);
+
+  //   return () => clearTimeout(intl);
+  // }, []);
+  // useTimeout((x: number, y: number) => console.log('xxx', x, y), 500, 123, 456);
+
+  useInterval(() => console.log('interval!!'), 1000);
+  // console.log('*****', new Date().getSeconds());
+  // useInterval(plusCount, 1500);
+  // const f = useCallback(() => { console.log('once?'); }, []);
+  const f = () => {
+    console.log('once?');
+  };
+  useTimeout(f, 1500);
+
+  useLayoutEffect(() => {
+    // console.log('useLayoutEffect!!');
+  }, []);
+
+  useEffect(() => {
+    plusCount();
+    // console.log('effect', count);
+
+    return () => {
+      // console.log('xx');
+      minusCount();
+    };
+  }, [count, plusCount, minusCount]); // 1
+
+  useEffect(() => {
+    idRef.current?.focus();
+  }, []);
+
   return (
     <>
-      <form onSubmit={signIn} className='border p-4'>
+      <form onSubmit={signIn} className='p-4'>
         <LabelInput
           label='ID'
           type='number'
@@ -82,3 +128,5 @@ export default function Login() {
     </>
   );
 }
+
+// export default memo(Login, ({ login: a }, { login: b }) => a === b);
